@@ -2,6 +2,12 @@ const fs = require('fs');
 const express = require('express');
 
 const app = express();
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log('Hello from the middleware 👋');
+  next();
+});
 
 app.get('/', (req, res) => {
   res
@@ -12,6 +18,7 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   res.send('You can post at this end point...');
 });
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
@@ -24,6 +31,11 @@ app.get('/api/v1/tours', (req, res) => {
       tours,
     },
   });
+});
+
+app.post('/api/v1/tours', (req, res) => {
+  console.log(req.body);
+  res.send('Done');
 });
 
 const port = 3000;
