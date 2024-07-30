@@ -1,6 +1,5 @@
 import express from 'express';
-// const morgan = fs.readFile('morgan');
-import { promises as fs } from 'fs';
+import morgan from 'morgan';
 
 import tourRoutes from './routes/tourRoutes.js';
 import userRoutes from './routes/userRoutes.js';

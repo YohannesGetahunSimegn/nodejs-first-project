@@ -6,7 +6,7 @@ import app from './app.js';
 
 // dotenv.config({ path: './.env' });
 // const app = fs.readFile('./app');
-console.log(process.env.NODE_ENV);
+// console.log(process.env.NODE_ENV);
 
 const DB = process.env.DATABASE.replace(
   '<password>',
@@ -23,10 +23,6 @@ mongoose
   .then(() => console.log('DB Connection successful!'));
 
 const port = process.env.PORT || 3000;
-// app.listen(port, () => {
-//   console.log(`App running on port ${port}...`);
-// });
-
 app.listen(port, () => {
   console.log(`Server is running at${port}...`);
 });
