@@ -1,8 +1,9 @@
-const express = require('express');
-const morgan = require('morgan');
+import express from 'express';
+// const morgan = fs.readFile('morgan');
+import { promises as fs } from 'fs';
 
-const tourRouter = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
+import tourRoutes from './routes/tourRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
@@ -12,7 +13,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.json());
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
@@ -26,7 +27,7 @@ app.use((req, res, next) => {
 
 // 3)  Routes**************************
 
-app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/tours', tourRoutes);
+app.use('/api/v1/users', userRoutes);
 
-module.exports = app;
+export default app;

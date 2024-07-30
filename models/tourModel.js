@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = fs.readFile('mongoose');
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,

@@ -1,14 +1,13 @@
-const express = require('express');
-const tourController = require('./../controllers/tourController');
+// routes/tourRoutes.js
+import express from 'express';
+import tourController from '../controllers/tourController.js'; // Adjust path as needed
 
 const router = express.Router();
-
-router.param('id', tourController.checkID);
 
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.checkbody, tourController.createTour);
+  .post(tourController.createTour);
 
 router
   .route('/:id')
@@ -16,4 +15,4 @@ router
   .patch(tourController.updateTour)
   .delete(tourController.deleteTour);
 
-module.exports = router;
+export default router;
