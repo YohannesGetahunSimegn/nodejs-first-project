@@ -1,5 +1,5 @@
 // import fs from 'fs';
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -54,8 +54,9 @@ const tourSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  startDates: [Date],
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
-export default Tour;
+module.exports = Tour;

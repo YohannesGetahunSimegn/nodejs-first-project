@@ -1,9 +1,23 @@
 // import fs from 'fs';
-import Tour from '../models/tourModel.js';
+import Tour from '../models/tourModel.cjs';
 
 async function getAllTours(req, res) {
   try {
-    const tours = await Tour.find();
+    // BUILD A QUERY******
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
+    const query = await Tour.find(queryObj);
+
+    // EXECUTE A QUERY********
+
+    const tours = await query;
+
+    // const query = await Tour.find()
+    //   .where('duration')
+    //   .equals(5)
+    //   .where('difficulty')
+    //   .equals('easy');
 
     res.status(200).json({
       status: 'success',
