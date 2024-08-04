@@ -3,22 +3,28 @@ import Tour from '../models/tourModel.cjs';
 
 async function getAllTours(req, res) {
   try {
+    console.log(req.query);
     // BUILD A QUERY******
+    // 1A)Filtering
     const queryObj = { ...req.query };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
-    const query = await Tour.find(queryObj);
+
+    // 1B) Advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    console.log(JSON.parse(queryStr));
+
+    let query = await Tour.find(JSON.parse(queryStr));
+
+    // 2) Sorting
 
     // EXECUTE A QUERY********
 
     const tours = await query;
 
-    // const query = await Tour.find()
-    //   .where('duration')
-    //   .equals(5)
-    //   .where('difficulty')
-    //   .equals('easy');
-
+    // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: tours.length,
