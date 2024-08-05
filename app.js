@@ -14,11 +14,6 @@ app.use(express.json());
 // app.use(express.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
-  console.log('Hello from the middleware 👋');
-  next();
-});
-
-app.use((req, res, next) => {
   req.requestTime = new Date();
   next();
 });
@@ -27,5 +22,26 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
+
+app.all('*', (req, res, next) => {
+  // res.status(404).json({
+  //   status: 'fail',
+  //   message: `Can't find ${req.originalUrl} on this server`,
+  // });
+  const err = new Error(`cant find ${req.originalUrl} on this server`);
+  err.status = 'fail';
+  err.statusCode = 404;
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || 'error';
+
+  res.status(err.statuscode).json({
+    status: err.status,
+    message: err.message,
+  });
+});
 
 export default app;
