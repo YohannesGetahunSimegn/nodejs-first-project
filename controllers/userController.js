@@ -1,8 +1,23 @@
-function getAllUsers(req, res) {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
-  });
+import User from '../models/userModel.js';
+
+async function getAllUsers(req, res, next) {
+  try {
+    const results = await User.find({});
+
+    res.status(200).json({
+      status: 'success',
+      results: results.length,
+      data: {
+        tours: results,
+      },
+    });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({
+      status: 'error',
+      message: err.message,
+    });
+  }
 }
 
 function getUser(req, res) {

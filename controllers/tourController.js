@@ -1,4 +1,3 @@
-// import fs from 'fs';
 import Tour from '../models/tourModel.cjs';
 
 async function getAllTours(req, res) {
