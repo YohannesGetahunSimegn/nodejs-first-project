@@ -1,18 +1,23 @@
 // routes/tourRoutes.js
 import express from 'express';
-import tourController from '../controllers/tourController.js'; // Adjust path as needed
+import tourController from '../controllers/tourController.js';
+import authController from '../controllers/authController.js';
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(tourController.getAllTours)
+  .get(authController.protect, tourController.getAllTours)
   .post(tourController.createTour);
 
 router
   .route('/:id')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    tourController.deleteTour
+  );
 
 export default router;
