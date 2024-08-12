@@ -1,23 +1,51 @@
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import ExpressMongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+
 import express from 'express';
 import morgan from 'morgan';
+import path from 'path';
 
 import tourRoutes from './routes/tourRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
-// 1) Middlewears***********
+// 1) Global Middlewears***********
 
+// Set Security HTTP headers
+app.use(helmet());
+
+// Limit requuest from same api
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many request from this IP, please try again in an hour!',
+});
+
+app.use('/api', limiter);
+
+// Development login
 app.use(morgan('dev'));
 
-app.use(express.json());
-// app.use(express.static(`${__dirname}/public`));
+// Body parser reading data from body into req.body
+app.use(express.json({ limit: '100k' }));
 
+// serving static files
+app.use(express.static(path.resolve('public')));
+
+// Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date();
   next();
 });
 
+// Data sanitization against NoSQL query injection
+app.use(ExpressMongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
 // 3)  Routes**************************
 
 app.use('/api/v1/tours', tourRoutes);
