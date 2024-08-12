@@ -1,10 +1,15 @@
 import mongoose from 'mongoose';
 import app from './app.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
+let databaseUrl = process.env.DATABASE;
+const databasepassword = process.env.DATABASE_PASSWORD;
+
+databaseUrl = databaseUrl.replace('<password>', databasepassword);
 
 mongoose
-  .connect(
-    'mongodb+srv://yohag2gs:ERTaWSRO2hTBRyte@fullstackapp-ygs.zd641lt.mongodb.net/?retryWrites=true&w=majority&appName=fullstackapp-ygs'
-  )
+  .connect(databaseUrl)
   .then(() => console.log('Database connected'))
   .catch((err) => console.error('Database connection error:', err));
 
